@@ -44,7 +44,7 @@
     color: var(--main-color);
 }
 
-.sidebar__item-inner.active {
+.active-nav-link .sidebar__item-inner {
     border-radius: var(--border-radius);
     background-image: linear-gradient(
         to right,

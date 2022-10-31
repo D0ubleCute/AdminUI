@@ -6,18 +6,18 @@ import './assets/boxicons-2.1.4/css/boxicons.min.css'
 import './assets/css/grid.css'
 import './assets/css/index.css'
 
-import Layout from './components/layout/Layout';
 import App from './App';
+import Layout from './components/layout/Layout'
 
 document.title = 'Đặt sân bóng đá'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Layout></Layout>
     <BrowserRouter>
       <App />
     </BrowserRouter>
+
   </React.StrictMode>
 );
 

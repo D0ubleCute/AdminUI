@@ -36,8 +36,8 @@ const renderUserToggle= (user) => (
 )
 
 const renderUserMenu = (item, index) => (
-    <Link>
-        <div className="notification-item" key={index}>
+    <Link key={index}>
+        <div className="notification-item">
             <i className={item.icon}></i>
             <span>{item.content}</span>
         </div>

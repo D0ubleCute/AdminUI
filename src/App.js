@@ -3,15 +3,21 @@ import { Routes, Route } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard';
 import Customers from './pages/Customers';
+import Layout from './components/layout/Layout';
+import Product from './pages/Product';
+import Employee from './pages/Employee';
 
 const App = () => {
     return (
-        <div>
-            <Routes>
-                <Route path='/' element={<Dashboard />} />
+        <Routes>
+            <Route element={<Layout/>}>
                 <Route path='/customers' element={<Customers />} />
-            </Routes>
-        </div>
+                <Route path='/dashboard' element={<Dashboard />} />
+                <Route path='/products' element={<Product />} />
+                <Route path='/employee' element={<Employee />} />
+            </Route>
+        </Routes>
+        
     );
 };
 
