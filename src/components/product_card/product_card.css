@@ -1,0 +1,9 @@
+.product__item {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 25px;
+}
+
+.product__item-info {
+    border: black solid 1px;
+}

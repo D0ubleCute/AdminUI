@@ -7,7 +7,6 @@ import './assets/css/grid.css'
 import './assets/css/index.css'
 
 import App from './App';
-import Layout from './components/layout/Layout'
 
 document.title = 'Đặt sân bóng đá'
 
