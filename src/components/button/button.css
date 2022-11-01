@@ -1,0 +1,23 @@
+.customer__list-action button{
+    padding: 7px;
+    color: white
+}
+
+button {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.customer__list-add {
+    border: black solid 1px;
+    background-color: var(--main-color);
+}
+
+.customer__list-edit {
+    border: black solid 1px;
+    background-color: rgb(255, 128, 0);
+}
+
+
+

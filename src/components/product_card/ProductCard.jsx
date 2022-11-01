@@ -2,7 +2,7 @@ import "./product_card.css"
 
 import React from 'react';
 
-import product_image from '../../assets/images/coca.jpg'
+import product_image from '../../assets/images/coca1.jpg'
 
 const ProductCard = props => {
     return (
