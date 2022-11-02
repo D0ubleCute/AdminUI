@@ -11,10 +11,14 @@ const ProductCard = props => {
                 <img src={product_image} alt="product_image"></img>
             </div>
             <div className="product__item-info">
-            <br></br>
-                <p>{props.name}</p>
-                <p>{props.price}</p>
+                <h3>{props.name}</h3>
+                <div>
+                    <p style={{marginBottom: 0}}>{props.price}</p>
+                    <span>Supplier</span>
+                </div>                
             </div>
+
+            <button className="product__item__btn">View details</button>
         </div>
     );
 };
