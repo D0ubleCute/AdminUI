@@ -16,6 +16,10 @@ button {
     border-radius: 4px;
 }
 
+button:hover {
+    outline-color: orangered;
+}
+
 .customer__list-info {
     border: black solid 1px;
     background-color: var(--main-color);

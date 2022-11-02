@@ -6,7 +6,7 @@ import customerList from "../assets/jsonData/customers-list.json";
 
 import EditButton from "../components/button/EditButton";
 
-import Dialog from "../components/dialog/Dialog";
+import CustomerDialog from "../components/dialog/CustomerDialog";
 import { Button, Modal } from "react-bootstrap";
 import { useState } from "react";
 
@@ -71,7 +71,7 @@ const Customers = () => {
                     <Modal.Title>Add Customer</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Dialog />
+                    <CustomerDialog />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

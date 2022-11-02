@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, FormGroup, Button } from "react-bootstrap";
 
-const Dialog = () => {
+const CustomerDialog = () => {
     return (
         <Form>
             <FormGroup className="mb-3">
@@ -9,34 +9,34 @@ const Dialog = () => {
                 <Form.Control type="text" placeholder="Enter name" required />
             </FormGroup>
             <FormGroup className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" required />
-            </FormGroup>
-            <FormGroup className="mb-3">
-                <Form.Label>Phone number</Form.Label>
+                <Form.Label>Price</Form.Label>
                 <Form.Control
                     type="number"
-                    placeholder="Enter phone"
+                    placeholder="Enter price"
                     required
                 />
             </FormGroup>
             <FormGroup className="mb-3">
-                <Form.Label>Location</Form.Label>
+                <Form.Label>Quantity</Form.Label>
                 <Form.Control
-                    type="text"
-                    placeholder="Enter location"
+                    type="number"
+                    placeholder="Enter quantity"
                     required
                 />
+            </FormGroup>
+            <FormGroup className="mb-3">
+                <Form.Label>Import Product Picture</Form.Label>
+                <Form.Control type="file" required />
             </FormGroup>
             <Button
                 className="btn btn-success btn-lg btn-block"
                 type="submit"
                 block
             >
-                Add new Customer
+                Add new product
             </Button>
         </Form>
     );
 };
 
-export default Dialog;
+export default CustomerDialog;
