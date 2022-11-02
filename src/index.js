@@ -3,9 +3,9 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 import "./assets/boxicons-2.1.4/css/boxicons.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/css/grid.css";
 import "./assets/css/index.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 
 document.title = "Đặt sân bóng đá";

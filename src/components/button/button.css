@@ -5,9 +5,9 @@ button i {
     letter-spacing: 0.4px;
 }
 
-.customer__list-action button{
+.customer__list-action button {
     padding: 7px;
-    color: white
+    color: white;
 }
 
 button {
@@ -16,7 +16,8 @@ button {
     border-radius: 4px;
 }
 
-.customer__list-add {
+.customer__list-info {
+    border: black solid 1px;
     background-color: var(--main-color);
 }
 
@@ -24,6 +25,3 @@ button {
     border: black solid 1px;
     background-color: var(--main-color);
 }
-
-
-
