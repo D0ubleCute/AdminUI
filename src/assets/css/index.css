@@ -103,7 +103,7 @@ transition: width 0.25s ease-in;
 }
 
 .page-header .header button:hover:before {
-width: 0;
+    width: 0;
 }
 
 .card {
