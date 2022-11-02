@@ -1,5 +1,6 @@
 .layout {
     color: var(--txt-color);
+    background-color: var(--second-bg);
 }
 
 .layout__content {
