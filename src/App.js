@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Dashboard from './pages/Dashboard';
 import Customers from './pages/Customers';
@@ -11,6 +11,7 @@ const App = () => {
     return (
         <Routes>
             <Route element={<Layout/>}>
+                <Route path='/' element={<Navigate to="/dashboard" />} />
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/customers' element={<Customers />} />
                 <Route path='/products' element={<Product />} />

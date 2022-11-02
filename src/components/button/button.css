@@ -1,3 +1,10 @@
+button i {
+    font-family: "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0.4px;
+}
+
 .customer__list-action button{
     padding: 7px;
     color: white
@@ -10,13 +17,12 @@ button {
 }
 
 .customer__list-add {
-    border: black solid 1px;
     background-color: var(--main-color);
 }
 
 .customer__list-edit {
     border: black solid 1px;
-    background-color: rgb(255, 128, 0);
+    background-color: var(--main-color);
 }
 
 
