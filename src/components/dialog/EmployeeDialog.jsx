@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, FormGroup, Button } from "react-bootstrap";
 
-const CustomerDialog = () => {
+const EmployeeDialog = () => {
     return (
         <Form>
             <FormGroup className="mb-3">
@@ -9,34 +9,43 @@ const CustomerDialog = () => {
                 <Form.Control type="text" placeholder="Enter name" required />
             </FormGroup>
             <FormGroup className="mb-3">
-                <Form.Label>Price</Form.Label>
+                <Form.Label>Email</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" required />
+            </FormGroup>
+            <FormGroup className="mb-3">
+                <Form.Label>Phone number</Form.Label>
                 <Form.Control
                     type="number"
-                    placeholder="Enter price"
+                    placeholder="Enter phone"
                     required
                 />
             </FormGroup>
             <FormGroup className="mb-3">
-                <Form.Label>Quantity</Form.Label>
+                <Form.Label>Location</Form.Label>
                 <Form.Control
-                    type="number"
-                    placeholder="Enter quantity"
+                    type="text"
+                    placeholder="Enter location"
                     required
                 />
             </FormGroup>
             <FormGroup className="mb-3">
-                <Form.Label>Import Product Picture</Form.Label>
-                <Form.Control type="file" accept="image/*" required />
+                <Form.Label>Avatar</Form.Label>
+                <Form.Control
+                    type="file"
+                    accept="image/*"
+                    placeholder="Enter employee avatar"
+                    required
+                />
             </FormGroup>
             <Button
                 className="btn btn-success btn-lg btn-block"
                 type="submit"
                 block
             >
-                Add new product
+                Add new Employee
             </Button>
         </Form>
     );
 };
 
-export default CustomerDialog;
+export default EmployeeDialog;
