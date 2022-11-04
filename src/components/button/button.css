@@ -1,31 +1,30 @@
 button i {
-    font-family: "Roboto", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    letter-spacing: 0.4px;
-}
-
-.customer__list-action button {
-    padding: 7px;
-    color: white;
+	font-family: 'Roboto', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	letter-spacing: 0.4px;
 }
 
 button {
-    margin: 5px;
-    padding: 5px;
-    border-radius: 4px;
+	margin: 5px;
+	padding: 5px;
+	border-radius: 4px;
 }
 
 button:hover {
-    outline-color: orangered;
+	outline-color: orangered;
 }
 
-.customer__list-info {
-    border: black solid 1px;
-    background-color: var(--main-color);
-}
-
+.customer__list-info,
 .customer__list-edit {
-    border: black solid 1px;
-    background-color: var(--main-color);
+	background-color: var(--main-color);
+	color: white;
+	padding: 10px 20px;
+	border-radius: 10px;
+	transition: all 0.3s ease;
+}
+
+.customer__list-info:hover,
+.customer__list-edit:hover {
+	background-color: cadetblue;
 }
