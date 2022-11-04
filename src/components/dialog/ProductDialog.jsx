@@ -26,7 +26,7 @@ const CustomerDialog = () => {
             </FormGroup>
             <FormGroup className="mb-3">
                 <Form.Label>Import Product Picture</Form.Label>
-                <Form.Control type="file" required />
+                <Form.Control type="file" accept="image/*" required />
             </FormGroup>
             <Button
                 className="btn btn-success btn-lg btn-block"
