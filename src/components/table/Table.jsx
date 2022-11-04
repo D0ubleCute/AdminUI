@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import CustomerProfileButton from '../button/CustomerProfileButton';
+import React, { useEffect, useState } from 'react';
+import DeleteButton from '../button/DeleteButton';
+import ProfileButton from '../button/ProfileButton';
 import Loading from '../loading/Loading';
-import CustomerProfile from '../profile/CustomerProfile';
+import Profile from '../profile/Profile';
 
 import './table.css';
 let pages = 1;
@@ -13,24 +14,30 @@ const Table = (props) => {
 	);
 	const [currPage, setCurrPage] = useState(0);
 	const [profileShow, setProfileShow] = useState(false);
-	const [customer, setCustomer] = useState(null);
+	const [user, setUser] = useState(null);
 	if (props.limit !== undefined) {
 		let page = Math.floor(props.bodyData.length / Number(props.limit));
 		pages = props.bodyData.length % Number(props.limit) === 0 ? page : page + 1;
 		range = [...Array(pages).keys()];
 	}
 
+	useEffect(() => {
+		setDataShow(
+			props.limit && props.bodyData
+				? props?.bodyData.slice(0, Number(props.limit))
+				: props?.bodyData
+		);
+	}, [props.bodyData, props.limit]);
+
 	const selectPage = (page) => {
 		const start = Number(props.limit) * page;
 		const end = start + Number(props.limit);
-		console.log(start, end);
 		setDataShow(props.bodyData.slice(start, end));
-
 		setCurrPage(page);
 	};
 
-	const handleFetchCustomer = (id) => {
-		setCustomer(props.bodyData.find((item) => item.id === id));
+	const handleFetchUser = (id) => {
+		setUser(props.bodyData.find((item) => item.id === id || item.resourceId === id));
 		setProfileShow(true);
 	};
 	return (
@@ -52,18 +59,21 @@ const Table = (props) => {
 						) : props.bodyData && props.bodyData.length > 0 ? (
 							dataShow.map((item) => {
 								return (
-									<tr key={item?.id}>
-										<td>{item?.id}</td>
+									<tr key={item?.id || item?.resourceId}>
+										<td>{item?.id || item?.resourceId}</td>
 										<td>{item?.account.fullName}</td>
 										<td>{item?.account.email}</td>
 										<td>{item?.account.phone}</td>
 										<td>{item?.account.address}</td>
-										<td>
-											<CustomerProfileButton
+										<td className="flex items-center gap-2">
+											<ProfileButton
 												onClick={() => {
-													handleFetchCustomer(item?.id);
+													handleFetchUser(item?.id || item?.resourceId);
 												}}
 											/>
+											<DeleteButton
+												onClick={() => props.handleRemove(item?.id || item?.resourceId)}
+											></DeleteButton>
 										</td>
 									</tr>
 								);
@@ -85,7 +95,7 @@ const Table = (props) => {
 					))}
 				</div>
 			) : null}
-			<CustomerProfile customer={customer} show={profileShow} setShow={setProfileShow} />
+			<Profile user={user} show={profileShow} setShow={setProfileShow} />
 		</div>
 	);
 };

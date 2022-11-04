@@ -8,7 +8,7 @@ import { useState } from 'react';
 import Header from '../components/header/Header';
 import { CUSTOMERS_GET, token } from '../utils/constant';
 import Loading from '../components/loading/Loading';
-import CustomerProfileButton from '../components/button/CustomerProfileButton';
+import DeleteConfirm from '../components/modal/DeleteConfirm';
 
 const customerTableHead = ['', 'name', 'email', 'phone', 'location', 'action'];
 
@@ -18,29 +18,52 @@ const Customers = () => {
 	const [show, setShow] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [customers, setCustomers] = useState([]);
-
+	const [customerDeleteId, setCustomerDeleteId] = useState(null);
+	const [showModalDeleteCustomer, setShowModalDeleteCustomer] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
+	const handleRemove = (id) => {
+		setCustomerDeleteId(id);
+		setShowModalDeleteCustomer(true);
+	};
 
+	const handleDelete = async () => {
+		if (!customerDeleteId) return;
+		setIsLoading(true);
+		const response = await fetch(`${CUSTOMERS_GET}/${customerDeleteId}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			method: 'DELETE',
+		});
+		console.log(response);
+		if (response?.status === 200) {
+			handleFetchData();
+		}
+		setShowModalDeleteCustomer(false);
+		setIsLoading(false);
+	};
+	const handleFetchData = async () => {
+		setIsLoading(true);
+		const response = await fetch(CUSTOMERS_GET, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			method: 'GET',
+		});
+		const data = await response.json();
+		console.log(data);
+		setIsLoading(false);
+		if (data.status === 200 && data?.data?.content.length > 0) {
+			setCustomers([...data.data.content]);
+		} else {
+			console.error(response);
+		}
+	};
 	useEffect(() => {
-		(async () => {
-			setIsLoading(true);
-			const response = await fetch(CUSTOMERS_GET, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-				method: 'GET',
-			});
-			const data = await response.json();
-			if (data?.status === 200) {
-				setCustomers(data?.data.content);
-			} else {
-				console.error(data);
-			}
-			setIsLoading(false);
-		})();
+		handleFetchData();
 	}, []);
-	if (customers.length > 0) {
+	if (!isLoading) {
 		return (
 			<div>
 				<div className="flex items-center justify-between mb-2 header">
@@ -64,7 +87,8 @@ const Customers = () => {
 									renderHead={(item, index) => renderHead(item, index)}
 									bodyData={customers}
 									isLoading={isLoading}
-								/>
+									handleRemove={handleRemove}
+								></Table>
 							</div>
 						</div>
 					</div>
@@ -82,6 +106,13 @@ const Customers = () => {
 						</Button>
 					</Modal.Footer>
 				</Modal>
+				{customerDeleteId && (
+					<DeleteConfirm
+						show={showModalDeleteCustomer}
+						handleClose={() => setShowModalDeleteCustomer(false)}
+						handleDelete={handleDelete}
+					/>
+				)}
 			</div>
 		);
 	}

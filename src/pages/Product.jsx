@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useState } from 'react';
 
 import ProductCard from '../components/product_card/ProductCard';
 
-import productItem from '../assets/jsonData/product.json';
-
 import ProductDialog from '../components/dialog/ProductDialog';
 import { Button, Modal } from 'react-bootstrap';
 import Header from '../components/header/Header';
+import { ITEMS_GET, token } from '../utils/constant';
 
 const Product = () => {
 	const [show, setShow] = useState(false);
 
 	const [products, setProducts] = useState([]);
-
+	useEffect(() => {
+		(async () => {
+			const response = await fetch(ITEMS_GET, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			const data = await response.json();
+			if (data._embedded) {
+				setProducts(data._embedded.items);
+			}
+		})();
+	}, []);
+	console.log(products);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
 	return (
@@ -27,19 +41,25 @@ const Product = () => {
 					data-toggle="modal"
 				>
 					<i className="bx bxs-add-to-queue"></i>
-					<span> Add Product</span>
+					<span>Add Product</span>
 				</Button>
 			</div>
 			<div className="row">
-				{productItem.map((item) => (
-					<div key={item.id}>
-						<ProductCard image={item.image} name={item.name} price={item.price} />
-					</div>
-				))}
+				{products?.length > 0 &&
+					products.map((item) => (
+						<div key={item.id}>
+							<ProductCard
+								image={item.image}
+								name={item.name}
+								price={item.importPrice}
+								quantity={item.quantity}
+							/>
+						</div>
+					))}
 			</div>
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header>
-					<Modal.Title>Add Customer</Modal.Title>
+					<Modal.Title>Add Product</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<ProductDialog />

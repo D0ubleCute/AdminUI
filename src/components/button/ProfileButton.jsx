@@ -1,6 +1,6 @@
 import './button.css';
 
-const CustomerProfileButton = (props) => {
+const ProfileButton = (props) => {
 	return (
 		<div className="flex items-center gap-2 customer__list-action">
 			<button className="customer__list-info" type="button" onClick={props?.onClick}>
@@ -10,4 +10,4 @@ const CustomerProfileButton = (props) => {
 	);
 };
 
-export default CustomerProfileButton;
+export default ProfileButton;
