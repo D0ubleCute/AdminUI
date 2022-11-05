@@ -8,6 +8,7 @@ import Product from './pages/Product';
 import Employee from './pages/Employee';
 import Suppliers from './pages/Suppliers';
 import ProductSupplier from './pages/ProductSupplier';
+import LogIn from './pages/Author/LogIn';
 
 const App = () => {
 	return (
@@ -21,6 +22,7 @@ const App = () => {
 				<Route path="/suppliers/:id" element={<ProductSupplier />} />
 				<Route path="/suppliers" element={<Suppliers />} />
 			</Route>
+			<Route path="/login" element={<LogIn />} />
 		</Routes>
 	);
 };
