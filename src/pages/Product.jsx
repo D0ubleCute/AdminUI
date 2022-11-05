@@ -8,11 +8,14 @@ import ProductDialog from '../components/dialog/ProductDialog';
 import { Button, Modal } from 'react-bootstrap';
 import Header from '../components/header/Header';
 import { ITEMS_GET, token } from '../utils/constant';
+import ProductDetail from '../components/product_card/ProductDetail';
 
 const Product = () => {
 	const [show, setShow] = useState(false);
-
 	const [products, setProducts] = useState([]);
+	const [showDetail, setShowDetail] = useState(false);
+	const [itemDetail, setItemDetail] = useState(false);
+	const [refresh, setRefresh] = useState(false);
 	useEffect(() => {
 		(async () => {
 			const response = await fetch(ITEMS_GET, {
@@ -27,8 +30,7 @@ const Product = () => {
 				setProducts(data._embedded.items);
 			}
 		})();
-	}, []);
-	console.log(products);
+	}, [refresh]);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
 	return (
@@ -47,12 +49,19 @@ const Product = () => {
 			<div className="row">
 				{products?.length > 0 &&
 					products.map((item) => (
-						<div key={item.id}>
+						<div key={item.resourceId}>
 							<ProductCard
+								id={item.resourceId}
 								image={item.image}
 								name={item.name}
 								price={item.importPrice}
 								quantity={item.quantity}
+								status={item.status}
+								handleViewDetail={() => {
+									setShowDetail(true);
+									setItemDetail(item);
+								}}
+								setRefresh={setRefresh}
 							/>
 						</div>
 					))}
@@ -62,7 +71,7 @@ const Product = () => {
 					<Modal.Title>Add Product</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<ProductDialog />
+					<ProductDialog onHide={handleClose} />
 				</Modal.Body>
 				<Modal.Footer>
 					<Button className="btn btn-danger btn-lg btn-block" onClick={handleClose}>
@@ -70,6 +79,15 @@ const Product = () => {
 					</Button>
 				</Modal.Footer>
 			</Modal>
+			{itemDetail && (
+				<ProductDetail
+					item={itemDetail}
+					show={showDetail}
+					handleClose={() => {
+						setShowDetail(false);
+					}}
+				/>
+			)}
 		</div>
 	);
 };

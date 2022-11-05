@@ -39,7 +39,7 @@ const EmployeeDialog = ({ setShow, handleFetchData }) => {
 			phone: '0326042022',
 			address: '360 pham van dong',
 			identityCard: '1900805822',
-			dob: '2022-11-03',
+			dob: '',
 			sex: 'MALE',
 			fieldGroupId: 1,
 			username: 'kavjp',
@@ -265,7 +265,7 @@ const EmployeeDialog = ({ setShow, handleFetchData }) => {
 			</FormGroup>
 
 			<Button className="btn btn-success btn-lg btn-block" type="submit">
-				Add new customer
+				Add new employee
 			</Button>
 		</Form>
 	);
