@@ -1,31 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/header/Header';
 import { Button, Modal } from 'react-bootstrap';
-import Table from '../components/table/Table';
-import { EMPLOYEES_GET, token } from '../utils/constant';
+import SupplierDialog from '../components/dialog/SupplierDialog';
+import Header from '../components/header/Header';
 import Loading from '../components/loading/Loading';
-import EmployeeDialog from '../components/dialog/EmployeeDialog';
 import DeleteConfirm from '../components/modal/DeleteConfirm';
-const employeeTableHead = ['', 'name', 'email', 'phone', 'location', 'action'];
+import TableSupplier from '../components/table/TableSupplier';
+import { SUPPLIER, token } from '../utils/constant';
+
+const supplierTableHead = ['', 'name', 'phone', 'address', 'note', 'action'];
 
 const renderHead = (item, index) => <th key={index}>{item}</th>;
-const Employee = () => {
+
+const Suppliers = () => {
 	const [show, setShow] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [employees, setEmployees] = useState([]);
-	const [showModalDeleteEmployee, setShowModalDeleteEmployee] = useState(false);
-	const [employeeDeleteId, setEmployeeDeleteId] = useState(null);
-	const handleShow = () => setShow(true);
+	const [suppliers, setSuppliers] = useState([]);
+	const [showModalDeleteSupplier, setShowModalDeleteSupplier] = useState(false);
+	const [supplierDeleteId, setSupplierDeleteId] = useState(null);
+
+	const [supplierUpdateId, setSupplierUpdateId] = useState(null);
+
+	const handleShow = () => {
+		setShow(true);
+		setSupplierUpdateId(null);
+	};
 	const handleClose = () => setShow(false);
 	const handleRemove = (id) => {
-		setEmployeeDeleteId(id);
-		setShowModalDeleteEmployee(true);
+		setSupplierDeleteId(id);
+		setShowModalDeleteSupplier(true);
 	};
 
+	useEffect(() => {
+		handleFetchData();
+	}, []);
+
 	const handleDelete = async () => {
-		if (!employeeDeleteId) return;
+		if (!supplierDeleteId) return;
 		setIsLoading(true);
-		const response = await fetch(`${EMPLOYEES_GET}/${employeeDeleteId}`, {
+		const response = await fetch(`${SUPPLIER}/${supplierDeleteId}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -35,11 +47,17 @@ const Employee = () => {
 			handleFetchData();
 		}
 		setIsLoading(false);
-		setShowModalDeleteEmployee(false);
+		setShowModalDeleteSupplier(false);
 	};
+
+	const handleUpdate = (id) => {
+		setSupplierUpdateId(id);
+		setShow(true);
+	};
+
 	const handleFetchData = async () => {
 		setIsLoading(true);
-		const response = await fetch(EMPLOYEES_GET, {
+		const response = await fetch(SUPPLIER, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -48,40 +66,39 @@ const Employee = () => {
 		const data = await response.json();
 		console.log(data);
 		setIsLoading(false);
-		if (data?._embedded?.employees && data?._embedded?.employees.length > 0) {
-			setEmployees([...data?._embedded?.employees]);
+		if (data?._embedded?.suppliers && data?._embedded?.suppliers.length > 0) {
+			setSuppliers([...data?._embedded?.suppliers]);
 		} else {
 			console.error(data);
 		}
 	};
-	useEffect(() => {
-		handleFetchData();
-	}, []);
+
 	if (!isLoading) {
 		return (
 			<div>
 				<div className="flex items-center justify-between mb-2 header">
-					<Header title="Employees"></Header>
+					<Header title="Suppliers"></Header>
 					<Button
 						onClick={handleShow}
 						className="flex items-center gap-2 text-black btn btn-success"
 						data-toggle="modal"
 					>
 						<i className="bx bxs-add-to-queue"></i>
-						<span>Add employee</span>
+						<span>Add supplier</span>
 					</Button>
 				</div>
 				<div className="row">
 					<div className="col-12">
 						<div className="card">
 							<div className="card__body">
-								<Table
+								<TableSupplier
 									limit="10"
-									headData={employeeTableHead}
+									headData={supplierTableHead}
 									renderHead={(item, index) => renderHead(item, index)}
-									bodyData={employees}
+									bodyData={suppliers}
 									isLoading={isLoading}
 									handleRemove={handleRemove}
+									handleUpdate={handleUpdate}
 								/>
 							</div>
 						</div>
@@ -89,10 +106,14 @@ const Employee = () => {
 				</div>
 				<Modal show={show} onHide={handleClose}>
 					<Modal.Header>
-						<Modal.Title>Add Employee</Modal.Title>
+						<Modal.Title>{supplierUpdateId ? `Update` : 'Add'} supplier</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<EmployeeDialog setShow={setShow} handleFetchData={handleFetchData}></EmployeeDialog>
+						<SupplierDialog
+							setShow={setShow}
+							handleFetchData={handleFetchData}
+							id={supplierUpdateId}
+						></SupplierDialog>
 					</Modal.Body>
 					<Modal.Footer>
 						<Button className="btn btn-danger btn-lg btn-block" onClick={handleClose}>
@@ -100,10 +121,10 @@ const Employee = () => {
 						</Button>
 					</Modal.Footer>
 				</Modal>
-				{employeeDeleteId && (
+				{supplierDeleteId && (
 					<DeleteConfirm
-						show={showModalDeleteEmployee}
-						handleClose={() => setShowModalDeleteEmployee(false)}
+						show={showModalDeleteSupplier}
+						handleClose={() => setShowModalDeleteSupplier(false)}
 						handleDelete={handleDelete}
 					/>
 				)}
@@ -117,4 +138,4 @@ const Employee = () => {
 	);
 };
 
-export default Employee;
+export default Suppliers;

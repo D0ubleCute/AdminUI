@@ -1,22 +1,27 @@
 [
-    {
-        "display_name": "Dashboard",
-        "route": "/dashboard",
-        "icon": "bx bx-football"
-    },
-    {
-        "display_name": "Customers",
-        "route": "/customers",
-        "icon": "bx bx-user-pin"
-    },
-    {
-        "display_name": "Products",
-        "route": "/products",
-        "icon": "bx bx-package"
-    },
-    {
-        "display_name": "Employee",
-        "route": "/employee",
-        "icon": "bx bx-notepad"
-    }
+	{
+		"display_name": "Dashboard",
+		"route": "/dashboard",
+		"icon": "bx bx-football"
+	},
+	{
+		"display_name": "Customers",
+		"route": "/customers",
+		"icon": "bx bx-user-pin"
+	},
+	{
+		"display_name": "Products",
+		"route": "/products",
+		"icon": "bx bx-package"
+	},
+	{
+		"display_name": "Employee",
+		"route": "/employee",
+		"icon": "bx bx-notepad"
+	},
+	{
+		"display_name": "Suppliers",
+		"route": "/suppliers",
+		"icon": "bx bxs-store-alt"
+	}
 ]

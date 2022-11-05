@@ -22,9 +22,13 @@ button:hover {
 	padding: 10px 20px;
 	border-radius: 10px;
 	transition: all 0.3s ease;
+	text-decoration: none;
 }
 
 .customer__list-info:hover,
-.customer__list-edit:hover {
+.customer__list-edit:hover,
+.customer__list-info:hover *,
+.customer__list-edit:hover * {
 	background-color: cadetblue;
+	color: white;
 }
