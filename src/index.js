@@ -6,13 +6,16 @@ import './assets/css/index.css';
 import App from './App';
 import './assets/boxicons-2.1.4/css/boxicons.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { AuthVerifyProvider } from './components/context/useAuthVerifyContext';
 
 document.title = 'Đặt sân bóng đá';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<BrowserRouter>
-		<App />
+		<AuthVerifyProvider>
+			<App />
+		</AuthVerifyProvider>
 	</BrowserRouter>
 );
 

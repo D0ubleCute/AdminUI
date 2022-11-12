@@ -6,6 +6,8 @@ import { EMPLOYEES_GET, token } from '../utils/constant';
 import Loading from '../components/loading/Loading';
 import EmployeeDialog from '../components/dialog/EmployeeDialog';
 import DeleteConfirm from '../components/modal/DeleteConfirm';
+import { useAuth } from '../components/store/useAuth';
+import { useNotify } from '../components/store/useNotify';
 const employeeTableHead = ['', 'name', 'email', 'phone', 'location', 'action'];
 
 const renderHead = (item, index) => <th key={index}>{item}</th>;
@@ -15,6 +17,10 @@ const Employee = () => {
 	const [employees, setEmployees] = useState([]);
 	const [showModalDeleteEmployee, setShowModalDeleteEmployee] = useState(false);
 	const [employeeDeleteId, setEmployeeDeleteId] = useState(null);
+	const user = useAuth((state) => state.user);
+	const setOpen = useNotify((state) => state.setOpen);
+	const setContent = useNotify((state) => state.setContent);
+	const setType = useNotify((state) => state.setType);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
 	const handleRemove = (id) => {
@@ -27,12 +33,19 @@ const Employee = () => {
 		setIsLoading(true);
 		const response = await fetch(`${EMPLOYEES_GET}/${employeeDeleteId}`, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${user.token}`,
 			},
 			method: 'DELETE',
 		});
 		if (response?.status === 204) {
 			handleFetchData();
+			setType('success');
+			setContent('Delete product successfully');
+			setOpen();
+		} else {
+			setType('error');
+			setContent('Delete product failed');
+			setOpen();
 		}
 		setIsLoading(false);
 		setShowModalDeleteEmployee(false);
@@ -41,12 +54,11 @@ const Employee = () => {
 		setIsLoading(true);
 		const response = await fetch(EMPLOYEES_GET, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${user.token}`,
 			},
 			method: 'GET',
 		});
 		const data = await response.json();
-		console.log(data);
 		setIsLoading(false);
 		if (data?._embedded?.employees && data?._embedded?.employees.length > 0) {
 			setEmployees([...data?._embedded?.employees]);

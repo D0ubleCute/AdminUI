@@ -4,8 +4,9 @@ import SupplierDialog from '../components/dialog/SupplierDialog';
 import Header from '../components/header/Header';
 import Loading from '../components/loading/Loading';
 import DeleteConfirm from '../components/modal/DeleteConfirm';
+import { useAuth } from '../components/store/useAuth';
 import TableSupplier from '../components/table/TableSupplier';
-import { SUPPLIER, token } from '../utils/constant';
+import { SUPPLIER } from '../utils/constant';
 
 const supplierTableHead = ['', 'name', 'phone', 'address', 'note', 'action'];
 
@@ -19,7 +20,7 @@ const Suppliers = () => {
 	const [supplierDeleteId, setSupplierDeleteId] = useState(null);
 
 	const [supplierUpdateId, setSupplierUpdateId] = useState(null);
-
+	const user = useAuth((state) => state.user);
 	const handleShow = () => {
 		setShow(true);
 		setSupplierUpdateId(null);
@@ -39,7 +40,7 @@ const Suppliers = () => {
 		setIsLoading(true);
 		const response = await fetch(`${SUPPLIER}/${supplierDeleteId}`, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${user.token}`,
 			},
 			method: 'DELETE',
 		});
@@ -59,7 +60,7 @@ const Suppliers = () => {
 		setIsLoading(true);
 		const response = await fetch(SUPPLIER, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${user.token}`,
 			},
 			method: 'GET',
 		});
@@ -115,11 +116,6 @@ const Suppliers = () => {
 							id={supplierUpdateId}
 						></SupplierDialog>
 					</Modal.Body>
-					<Modal.Footer>
-						<Button className="btn btn-danger btn-lg btn-block" onClick={handleClose}>
-							Close
-						</Button>
-					</Modal.Footer>
 				</Modal>
 				{supplierDeleteId && (
 					<DeleteConfirm

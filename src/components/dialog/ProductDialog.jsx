@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Form, FormGroup, Button } from 'react-bootstrap';
+import { Form, FormGroup, Button, Alert } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import { API_UPLOAD, ITEM_ORDER, key, SUPPLIER, token } from '../../utils/constant';
+import { API_UPLOAD, ITEM_ORDER, SUPPLIER, token } from '../../utils/constant';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Loading from '../loading/Loading';
+import { useAuth } from '../store/useAuth';
 const schema = yup.object().shape({
 	supplier_id: yup.number().required("Supplier's name is required"),
 	import_price: yup
@@ -20,14 +21,16 @@ const schema = yup.object().shape({
 	unit: yup.string().required("Product's unit is required"),
 	delivery_date: yup.string().required("Product's delivery date is required"),
 });
-const ProductDialog = ({ onHide }) => {
+const ProductDialog = ({ onHide, setRefresh }) => {
 	const [suppliers, setSuppliers] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const user = useAuth((state) => state.user);
 	const {
 		handleSubmit,
 		register,
 		formState: { isSubmitting, isValid, errors },
 		reset,
+		setError,
 	} = useForm({
 		mode: 'onChange',
 		defaultValues: {
@@ -47,7 +50,7 @@ const ProductDialog = ({ onHide }) => {
 			setIsLoading(true);
 			const response = await fetch(SUPPLIER, {
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${user.token}`,
 				},
 				method: 'GET',
 			});
@@ -59,7 +62,7 @@ const ProductDialog = ({ onHide }) => {
 				console.error(data);
 			}
 		})();
-	}, []);
+	}, [user.token]);
 
 	const onSubmit = async (data) => {
 		if (isSubmitting) return;
@@ -69,7 +72,7 @@ const ProductDialog = ({ onHide }) => {
 			const file = data?.image[0];
 			let formData = new FormData();
 			formData.append('image', file);
-			fetch(`https://api.imgbb.com/1/upload?key=3f7b638c409019f370014fe9a7a24cc5`, {
+			fetch(API_UPLOAD, {
 				method: 'POST',
 				body: formData,
 			})
@@ -96,7 +99,7 @@ const ProductDialog = ({ onHide }) => {
 							method: 'POST',
 							headers: {
 								'Content-Type': 'application/json',
-								Authorization: `Bearer ${token}`,
+								Authorization: `Bearer ${user.token}`,
 							},
 							body: JSON.stringify(data),
 						})
@@ -104,7 +107,6 @@ const ProductDialog = ({ onHide }) => {
 							.then((data) => {
 								console.log(data);
 								if (data.status === 200) {
-									alert('Create product successfully');
 									reset({
 										supplier_id: 1,
 										import_price: 0,
@@ -115,6 +117,7 @@ const ProductDialog = ({ onHide }) => {
 										unit: '',
 										delivery_date: '',
 									});
+									setRefresh((prev) => !prev);
 								}
 							});
 					}
@@ -127,6 +130,11 @@ const ProductDialog = ({ onHide }) => {
 					setIsLoading(false);
 					onHide();
 				});
+		} else {
+			setError('image', {
+				type: 'manual',
+				message: 'Image is required',
+			});
 		}
 	};
 	if (isSubmitting || isLoading)
@@ -181,19 +189,15 @@ const ProductDialog = ({ onHide }) => {
 			</FormGroup>
 			<FormGroup className="mb-3">
 				<Form.Label>Supplier</Form.Label>
-				<Form.Select aria-label="SELECT">
+				<Form.Select aria-label="SELECT" {...register('supplier_id')}>
 					<option disabled hidden>
 						Please select supplier
 					</option>
 					{suppliers?.length > 0 &&
 						suppliers.map((supplier, index) => {
+							console.log(supplier.resourceId);
 							return (
-								<option
-									key={index}
-									value={supplier.id}
-									name="supplier_id"
-									{...register('supplier_id')}
-								>
+								<option key={index} value={Number.parseInt(supplier.resourceId)} name="supplier_id">
 									{supplier.name}
 								</option>
 							);
@@ -208,8 +212,15 @@ const ProductDialog = ({ onHide }) => {
 				<Form.Label>Note</Form.Label>
 				<Form.Control as="textarea" rows={3} {...register('note')} placeholder="Enter note" />
 			</FormGroup>
+			<FormGroup className="mb-3">
+				{errors && Object.keys(errors).length > 0 && (
+					<Alert variant="danger">
+						<p style={{ marginBottom: 'unset' }}>{errors[Object.keys(errors)[0]]?.message}</p>
+					</Alert>
+				)}
+			</FormGroup>
 			<Button className="btn btn-success btn-lg btn-block" type="submit">
-				Add new product
+				Make payment
 			</Button>
 		</Form>
 	);

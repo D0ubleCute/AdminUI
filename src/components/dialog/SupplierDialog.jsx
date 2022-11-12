@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Loading from '../loading/Loading';
+import { useAuth } from '../store/useAuth';
 
 const schema = yup.object().shape({
 	name: yup.string().required('Name is required'),
@@ -22,20 +23,21 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 	} = useForm({
 		mode: 'onChange',
 		defaultValues: {
-			name: 'ka@gmail.com',
-			phone: '0326042022',
-			address: '360 pham van dong',
+			name: '',
+			phone: '',
+			address: '',
 			note: '',
 		},
 		resolver: yupResolver(schema),
 	});
+	const user = useAuth((state) => state.user);
 	useEffect(() => {
 		if (id) {
 			fetch(`${SUPPLIER}/${id}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${user.token}`,
 				},
 			})
 				.then((response) => response.json())
@@ -51,7 +53,8 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 					}
 				});
 		}
-	}, [id]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [id, user.token]);
 
 	const onSubmit = (data) => {
 		console.log(data);
@@ -60,7 +63,7 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 				method: id ? `PUT` : 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${user.token}`,
 				},
 				body: JSON.stringify(data),
 			})
@@ -76,7 +79,7 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 						});
 						setShow(false);
 					} else {
-						setError('error', { message: data.message || 'Error in create supplier' });
+						setError('error', { message: data.message || 'Error in update supplier' });
 					}
 				});
 		}
@@ -89,13 +92,13 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 		);
 	}
 	return (
-		<Form onSubmit={handleSubmit(onSubmit)}>
-			<FormGroup className="mb-3">
+		<Form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+			<FormGroup>
 				<Form.Label>Name</Form.Label>
 				<Form.Control type="text" placeholder="Enter name" name="fullName" {...register('name')} />
 			</FormGroup>
 
-			<FormGroup className="mb-3">
+			<FormGroup>
 				<Form.Label>Phone number</Form.Label>
 				<Form.Control
 					type="number"
@@ -104,7 +107,7 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 					placeholder="Enter phone number"
 				/>
 			</FormGroup>
-			<FormGroup className="mb-3">
+			<FormGroup>
 				<Form.Label>Address</Form.Label>
 				<Form.Control
 					type="text"
@@ -114,7 +117,7 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 				/>
 			</FormGroup>
 
-			<FormGroup className="mb-3">
+			<FormGroup>
 				<Form.Label>Note</Form.Label>
 				<Form.Control
 					as="textarea"
@@ -125,7 +128,7 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 				/>
 			</FormGroup>
 
-			<FormGroup className="mb-3">
+			<FormGroup>
 				{errors && Object.keys(errors).length > 0 && (
 					<Alert variant="danger">
 						<p style={{ marginBottom: 'unset' }}>{errors[Object.keys(errors)[0]]?.message}</p>
@@ -133,8 +136,11 @@ const SupplierDialog = ({ setShow, handleFetchData, id }) => {
 				)}
 			</FormGroup>
 
-			<Button className="btn btn-success btn-lg btn-block" type="submit">
+			<Button className="btn btn-success btn-lg btn-block uppercase" type="submit">
 				{id ? `Update` : 'Add new'} supplier
+			</Button>
+			<Button className="btn btn-secondary uppercase" onClick={() => setShow(false)}>
+				Cancel
 			</Button>
 		</Form>
 	);

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import DeleteButton from '../button/DeleteButton';
 import ProfileButton from '../button/ProfileButton';
 import UpdateButton from '../button/UpdateButton';
 import Loading from '../loading/Loading';
+import TooltipCustom from '../tooltip/TooltipCustom';
 
 import './table.css';
 let pages = 1;
@@ -61,15 +63,21 @@ const TableSupplier = (props) => {
 										<td>{item.address}</td>
 										<td>{item.note}</td>
 										<td className="flex items-center gap-2">
-											<DeleteButton
-												onClick={() => props.handleRemove(item?.id || item?.resourceId)}
-											></DeleteButton>
-											<UpdateButton
-												onClick={() => props.handleUpdate(item?.id || item?.resourceId)}
-											></UpdateButton>
-											<ProfileButton
-												to={`/suppliers/${item?.id || item?.resourceId}&${item?.name}`}
-											></ProfileButton>
+											<TooltipCustom content="Delete supplier" placement="top-end" arrow>
+												<DeleteButton
+													onClick={() => props.handleRemove(item?.id || item?.resourceId)}
+												></DeleteButton>
+											</TooltipCustom>
+											<TooltipCustom content="Update supplier" placement="top" arrow>
+												<UpdateButton
+													onClick={() => props.handleUpdate(item?.id || item?.resourceId)}
+												></UpdateButton>
+											</TooltipCustom>
+											<TooltipCustom content="Detail supplier" placement="top-start" arrow>
+												<ProfileButton
+													to={`/suppliers/${item?.id || item?.resourceId}&${item?.name}`}
+												></ProfileButton>
+											</TooltipCustom>
 										</td>
 									</tr>
 								);

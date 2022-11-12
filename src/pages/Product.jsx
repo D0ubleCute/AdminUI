@@ -7,8 +7,10 @@ import ProductCard from '../components/product_card/ProductCard';
 import ProductDialog from '../components/dialog/ProductDialog';
 import { Button, Modal } from 'react-bootstrap';
 import Header from '../components/header/Header';
-import { ITEMS_GET, token } from '../utils/constant';
+import { ITEMS_GET } from '../utils/constant';
 import ProductDetail from '../components/product_card/ProductDetail';
+import { useAuth } from '../components/store/useAuth';
+import Loading from '../components/loading/Loading';
 
 const Product = () => {
 	const [show, setShow] = useState(false);
@@ -16,23 +18,35 @@ const Product = () => {
 	const [showDetail, setShowDetail] = useState(false);
 	const [itemDetail, setItemDetail] = useState(false);
 	const [refresh, setRefresh] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const user = useAuth((state) => state.user);
 	useEffect(() => {
 		(async () => {
+			setIsLoading(true);
 			const response = await fetch(ITEMS_GET, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${user.token}`,
 				},
 			});
 			const data = await response.json();
+			setIsLoading(false);
 			if (data._embedded) {
 				setProducts(data._embedded.items);
 			}
 		})();
-	}, [refresh]);
+	}, [refresh, user.token]);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
+	if (isLoading) {
+		return (
+			<div className="flex items-center justify-center">
+				<Loading />
+			</div>
+		);
+	}
+
 	return (
 		<div className="page-header">
 			<div className="header">
@@ -43,9 +57,14 @@ const Product = () => {
 					data-toggle="modal"
 				>
 					<i className="bx bxs-add-to-queue"></i>
-					<span>Add Product</span>
+					<span>Order Product</span>
 				</Button>
 			</div>
+			{products?.length === 0 && (
+				<div className="flex items-center justify-center">
+					<h1 className="text-2xl uppercase">No product in storage</h1>
+				</div>
+			)}
 			<div className="row">
 				{products?.length > 0 &&
 					products.map((item) => (
@@ -57,21 +76,21 @@ const Product = () => {
 								price={item.importPrice}
 								quantity={item.quantity}
 								status={item.status}
+								setRefresh={setRefresh}
 								handleViewDetail={() => {
 									setShowDetail(true);
 									setItemDetail(item);
 								}}
-								setRefresh={setRefresh}
 							/>
 						</div>
 					))}
 			</div>
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header>
-					<Modal.Title>Add Product</Modal.Title>
+					<Modal.Title>Order new product</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<ProductDialog onHide={handleClose} />
+					<ProductDialog onHide={handleClose} setRefresh={setRefresh} />
 				</Modal.Body>
 				<Modal.Footer>
 					<Button className="btn btn-danger btn-lg btn-block" onClick={handleClose}>

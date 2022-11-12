@@ -9,6 +9,8 @@ import Header from '../components/header/Header';
 import { CUSTOMERS_GET, token } from '../utils/constant';
 import Loading from '../components/loading/Loading';
 import DeleteConfirm from '../components/modal/DeleteConfirm';
+import { useAuth } from '../components/store/useAuth';
+import { useNotify } from '../components/store/useNotify';
 
 const customerTableHead = ['', 'name', 'email', 'phone', 'location', 'action'];
 
@@ -20,6 +22,10 @@ const Customers = () => {
 	const [customers, setCustomers] = useState([]);
 	const [customerDeleteId, setCustomerDeleteId] = useState(null);
 	const [showModalDeleteCustomer, setShowModalDeleteCustomer] = useState(false);
+	const user = useAuth((state) => state.user);
+	const setOpen = useNotify((state) => state.setOpen);
+	const setContent = useNotify((state) => state.setContent);
+	const setType = useNotify((state) => state.setType);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
 	const handleRemove = (id) => {
@@ -28,31 +34,34 @@ const Customers = () => {
 	};
 
 	const handleDelete = async () => {
-		if (!customerDeleteId) return;
-		setIsLoading(true);
-		const response = await fetch(`${CUSTOMERS_GET}/${customerDeleteId}`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-			method: 'DELETE',
-		});
-		console.log(response);
-		if (response?.status === 200) {
-			handleFetchData();
-		}
+		setType('error');
+		setContent("This function isn't available");
+		setOpen();
 		setShowModalDeleteCustomer(false);
-		setIsLoading(false);
+		// if (!customerDeleteId) return;
+		// setIsLoading(true);
+		// const response = await fetch(`${CUSTOMERS_GET}/${customerDeleteId}`, {
+		// 	headers: {
+		// 		Authorization: `Bearer ${user.token}`,
+		// 	},
+		// 	method: 'DELETE',
+		// });
+		// console.log(response);
+		// if (response?.status === 200) {
+		// 	handleFetchData();
+		// }
+		// setShowModalDeleteCustomer(false);
+		// setIsLoading(false);
 	};
 	const handleFetchData = async () => {
 		setIsLoading(true);
 		const response = await fetch(CUSTOMERS_GET, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${user.token}`,
 			},
 			method: 'GET',
 		});
 		const data = await response.json();
-		console.log(data);
 		setIsLoading(false);
 		if (data.status === 200 && data?.data?.content.length > 0) {
 			setCustomers([...data.data.content]);
@@ -68,14 +77,14 @@ const Customers = () => {
 			<div>
 				<div className="flex items-center justify-between mb-2 header">
 					<Header title="customers"></Header>
-					<Button
+					{/* <Button
 						onClick={handleShow}
 						className="flex items-center gap-2 text-black btn btn-success"
 						data-toggle="modal"
 					>
 						<i className="bx bxs-add-to-queue"></i>
 						<span>Add Customer</span>
-					</Button>
+					</Button> */}
 				</div>
 				<div className="row">
 					<div className="col-12">

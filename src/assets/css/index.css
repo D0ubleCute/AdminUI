@@ -92,6 +92,7 @@ input:focus {
 	position: relative;
 	isolation: isolate;
 	transition: all 0.25s linear;
+	text-transform: uppercase;
 }
 
 .header button:before {

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Loading from '../loading/Loading';
+import { useAuth } from '../store/useAuth';
 
 const schema = yup.object().shape({
 	fullName: yup.string().required('Full name is required'),
@@ -24,7 +25,7 @@ const schema = yup.object().shape({
 
 const EmployeeDialog = ({ setShow, handleFetchData }) => {
 	const [fieldGroups, setFieldGroups] = useState([]);
-
+	const user = useAuth((state) => state.user);
 	const {
 		handleSubmit,
 		register,
@@ -53,19 +54,21 @@ const EmployeeDialog = ({ setShow, handleFetchData }) => {
 	useEffect(() => {
 		(async () => {
 			const response = await fetch(GROUPS_GET, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
 				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${user.token}`,
+				},
 			});
 			const data = await response.json();
-			if (data?._embedded?.fieldGroups && data?._embedded?.fieldGroups.length > 0) {
-				setFieldGroups([...data?._embedded?.fieldGroups]);
+			console.log(data);
+			if (data?._embedded?.groups && data?._embedded?.groups.length > 0) {
+				setFieldGroups([...data?._embedded?.groups]);
 			}
 		})();
-	}, []);
+	}, [user.token]);
 
-	console.log(errors);
+	console.log(fieldGroups);
 	const onSubmit = (data) => {
 		if (isValid && !isSubmitting) {
 			const date = data['dob'];
@@ -78,7 +81,7 @@ const EmployeeDialog = ({ setShow, handleFetchData }) => {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${user.token}`,
 				},
 				body: JSON.stringify(body),
 			})
@@ -217,20 +220,15 @@ const EmployeeDialog = ({ setShow, handleFetchData }) => {
 			</FormGroup>
 			<FormGroup className="mb-3">
 				<Form.Label>Group</Form.Label>
-				<Form.Select aria-label="SELECT">
+				<Form.Select aria-label="SELECT" {...register('fieldGroupId')}>
 					<option value="DEFAULT" disabled hidden>
 						Please select group
 					</option>
 					{fieldGroups?.length > 0 &&
 						fieldGroups.map((fieldGroup, index) => {
 							return (
-								<option
-									key={index}
-									value={fieldGroup.id}
-									name="fieldGroupId"
-									{...register('fieldGroupId')}
-								>
-									{fieldGroup.address}
+								<option key={index} value={fieldGroup.resourceId}>
+									{fieldGroup.name}
 								</option>
 							);
 						})}

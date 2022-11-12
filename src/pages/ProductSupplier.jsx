@@ -8,12 +8,15 @@ import Header from '../components/header/Header';
 import { ITEM_SUPPLIED, token } from '../utils/constant';
 import ProductDetail from '../components/product_card/ProductDetail';
 import { useParams } from 'react-router-dom';
+import { useAuth } from '../components/store/useAuth';
 
 const ProductSupplier = () => {
 	const [products, setProducts] = useState([]);
 	const [showDetail, setShowDetail] = useState(false);
 	const [itemDetail, setItemDetail] = useState(false);
+	const [refresh, setRefresh] = useState(false);
 	const { id } = useParams();
+	const user = useAuth((state) => state.user);
 	useEffect(() => {
 		(async () => {
 			if (id) {
@@ -21,7 +24,7 @@ const ProductSupplier = () => {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${user.token}`,
 					},
 				});
 				const data = await response.json();
@@ -30,7 +33,7 @@ const ProductSupplier = () => {
 				}
 			}
 		})();
-	}, [id]);
+	}, [id, refresh, user.token]);
 	if (!id) {
 		return <div>Not Found</div>;
 	}
@@ -61,6 +64,7 @@ const ProductSupplier = () => {
 									setShowDetail(true);
 									setItemDetail(item);
 								}}
+								setRefresh={setRefresh}
 							/>
 						</div>
 					))}
