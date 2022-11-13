@@ -1,4 +1,4 @@
-# This is the source code of client side code for the enterprise system development concept course.
+# This is the source code of client side for the enterprise system development concept course.
 
 ## How to run this project
 
