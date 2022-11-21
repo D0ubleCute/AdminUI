@@ -30,5 +30,14 @@
 		"link": "http://localhost:8080/api/booked-monthly-price",
 		"revenueByYear": "http://localhost:8080/api/total-booked-by-year",
 		"revenueByMonth": "http://localhost:8080/api/total-booked-by-month"
+	},
+	{
+		"id": 5,
+		"icon": "bx bx-dollar-circle",
+		"title": "Total employees salary each month",
+		"link": "http://localhost:8080/api/total-employee-salary-each-month",
+		"revenueByYear": "javascript:void(0)",
+		"revenueByMonth": "javascript:void(0)",
+		"disabled": true
 	}
 ]

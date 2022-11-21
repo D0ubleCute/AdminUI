@@ -50,10 +50,16 @@ const LogIn = () => {
 				'Content-Type': 'application/json',
 			},
 		});
-		if (response.status !== 200) {
-			setError('password', { type: 'custom', message: 'Username or password is incorrect' });
-		}
+
 		const data = await response.json();
+		console.log(data);
+		if (data.status !== 200) {
+			setError('password', {
+				type: 'manual',
+				message: data.message,
+			});
+			return;
+		}
 		if (!data.roles.includes('ADMIN') && !data.roles.includes('EMPLOYEE')) {
 			setError('password', {
 				type: 'custom',
@@ -61,6 +67,7 @@ const LogIn = () => {
 			});
 			return;
 		}
+		console.log(data);
 		setUser({ password: data.password, ...data });
 		sessionStorage.setItem('user', JSON.stringify(data));
 		notifyType('success');

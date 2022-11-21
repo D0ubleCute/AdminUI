@@ -18,6 +18,7 @@ import Fields from './pages/Fields';
 import FieldPickDateTime from './pages/FieldPickDateTime';
 import ProductSell from './pages/ProductSell';
 import ProtectedAdmin from './pages/Author/ProtectedAdmin';
+import HistoryTransaction from './pages/HistoryTransaction';
 
 const App = () => {
 	return (
@@ -27,8 +28,18 @@ const App = () => {
 					<Route path="/" element={<Navigate to="/dashboard" />} />
 					<Route element={<ProtectedAdmin />}>
 						<Route path="/dashboard" element={<Dashboard />} />
+						<Route
+							path="/customers/history-transaction/:id"
+							element={
+								<HistoryTransaction isCustomerHistoryTransaction={true}></HistoryTransaction>
+							}
+						></Route>
+						<Route
+							path="/employees/history-transaction/:id"
+							element={<HistoryTransaction></HistoryTransaction>}
+						></Route>
 						<Route path="/customers" element={<Customers />} />
-						<Route path="/employee" element={<Employee />} />
+						<Route path="/employees" element={<Employee />} />
 					</Route>
 					<Route path="/products" element={<Product />} />
 					<Route path="/suppliers/:id" element={<ProductSupplier />} />

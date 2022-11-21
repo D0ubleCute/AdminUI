@@ -37,7 +37,9 @@ const Employee = () => {
 			},
 			method: 'DELETE',
 		});
-		if (response?.status === 204) {
+		console.log(response);
+		if (response?.status === 200) {
+			/* A function that is used to fetch data from the server. */
 			handleFetchData();
 			setType('success');
 			setContent('Delete product successfully');
@@ -59,8 +61,9 @@ const Employee = () => {
 			method: 'GET',
 		});
 		const data = await response.json();
+		console.log(data);
 		setIsLoading(false);
-		if (data?._embedded?.employees && data?._embedded?.employees.length > 0) {
+		if (data?._embedded?.employees) {
 			setEmployees([...data?._embedded?.employees]);
 		} else {
 			console.error(data);
@@ -68,6 +71,7 @@ const Employee = () => {
 	};
 	useEffect(() => {
 		handleFetchData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	if (!isLoading) {
 		return (

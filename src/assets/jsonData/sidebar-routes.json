@@ -10,8 +10,8 @@
 		"icon": "bx bx-user-pin"
 	},
 	{
-		"display_name": "Employee",
-		"route": "/employee",
+		"display_name": "Employees",
+		"route": "/employees",
 		"icon": "bx bx-notepad"
 	},
 	{

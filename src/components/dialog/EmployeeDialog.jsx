@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormGroup, Button, Alert } from 'react-bootstrap';
-import { EMPLOYEE_POST, GROUPS_GET, token } from '../../utils/constant';
+import { EMPLOYEE_POST, GROUPS_GET } from '../../utils/constant';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Loading from '../loading/Loading';
 import { useAuth } from '../store/useAuth';
+import { useNotify } from '../store/useNotify';
 
 const schema = yup.object().shape({
 	fullName: yup.string().required('Full name is required'),
@@ -50,6 +51,10 @@ const EmployeeDialog = ({ setShow, handleFetchData }) => {
 		},
 		resolver: yupResolver(schema),
 	});
+
+	const setType = useNotify((state) => state.setType);
+	const setContent = useNotify((state) => state.setContent);
+	const setOpen = useNotify((state) => state.setOpen);
 
 	useEffect(() => {
 		(async () => {
@@ -103,6 +108,9 @@ const EmployeeDialog = ({ setShow, handleFetchData }) => {
 							description: '',
 							salary: 0,
 						});
+						setType('success');
+						setContent('Create employee successfully');
+						setOpen();
 						setShow(false);
 					} else {
 						setError('error', { message: data.message });

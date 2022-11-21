@@ -45,8 +45,6 @@ const labelsMonth = Array(new Date(currentYear, currentMonth, 0).getDate())
 	.fill(0)
 	.map((_, index) => `${index + 1}`);
 
-console.log(labelsMonth);
-
 // export const data = {
 // 	labels,
 // 	datasets: [

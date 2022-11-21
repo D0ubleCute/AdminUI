@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import DeleteButton from '../button/DeleteButton';
+import HistoryButton from '../button/HistoryButton';
 import ProfileButton from '../button/ProfileButton';
 import Loading from '../loading/Loading';
 import Profile from '../profile/Profile';
+import TooltipCustom from '../tooltip/TooltipCustom';
 
 import './table.css';
 let pages = 1;
@@ -66,14 +68,26 @@ const Table = (props) => {
 										<td>{item?.account.phone}</td>
 										<td>{item?.account.address}</td>
 										<td className="flex items-center gap-2">
-											<ProfileButton
-												onClick={() => {
-													handleFetchUser(item?.id || item?.resourceId);
-												}}
-											/>
-											<DeleteButton
-												onClick={() => props.handleRemove(item?.id || item?.resourceId)}
-											></DeleteButton>
+											<TooltipCustom content="Detail" placement="top-end" arrow>
+												<ProfileButton
+													onClick={() => {
+														handleFetchUser(item?.id || item?.resourceId);
+													}}
+												/>
+											</TooltipCustom>
+
+											<TooltipCustom content="Delete" placement="top" arrow>
+												<DeleteButton
+													onClick={() => props.handleRemove(item?.id || item?.resourceId)}
+												></DeleteButton>
+											</TooltipCustom>
+											<TooltipCustom content="History transaction" placement="top-start" arrow>
+												<HistoryButton
+													to={`/${
+														props.isTableCustomer ? 'customers' : 'employees'
+													}/history-transaction/${item?.id || item?.resourceId}`}
+												></HistoryButton>
+											</TooltipCustom>
 										</td>
 									</tr>
 								);

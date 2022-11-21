@@ -21,12 +21,12 @@ const FieldCard = ({ id, name, price, image, setRefresh, type }) => {
 			<div className="mt-auto">
 				<div className="mt-3">
 					<h1 className="text-5xl font-semibold text-gray-800">{name}</h1>
-					<div className="flex items-center">
+					<div className="flex items-center my-3">
 						<p className="text-lg text-gray-800">
 							<strong>{formatMoney(price)}</strong>
 							<span className="text-gray-800 text-md">/hour</span>
 						</p>
-						<p className="text-lg text-gray-800 ml-auto">
+						<p className="ml-auto text-lg text-gray-800">
 							<span>Loại: </span>
 							<strong className="text-gray-800 text-md">sân {type.split('_')[1]}</strong>
 						</p>

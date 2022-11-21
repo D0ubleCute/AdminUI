@@ -6,7 +6,7 @@ import CustomerDialog from '../components/dialog/CustomerDialog';
 import { Button, Modal } from 'react-bootstrap';
 import { useState } from 'react';
 import Header from '../components/header/Header';
-import { CUSTOMERS_GET, token } from '../utils/constant';
+import { CUSTOMERS_GET } from '../utils/constant';
 import Loading from '../components/loading/Loading';
 import DeleteConfirm from '../components/modal/DeleteConfirm';
 import { useAuth } from '../components/store/useAuth';
@@ -34,24 +34,24 @@ const Customers = () => {
 	};
 
 	const handleDelete = async () => {
-		setType('error');
-		setContent("This function isn't available");
-		setOpen();
 		setShowModalDeleteCustomer(false);
-		// if (!customerDeleteId) return;
-		// setIsLoading(true);
-		// const response = await fetch(`${CUSTOMERS_GET}/${customerDeleteId}`, {
-		// 	headers: {
-		// 		Authorization: `Bearer ${user.token}`,
-		// 	},
-		// 	method: 'DELETE',
-		// });
-		// console.log(response);
-		// if (response?.status === 200) {
-		// 	handleFetchData();
-		// }
-		// setShowModalDeleteCustomer(false);
-		// setIsLoading(false);
+		if (!customerDeleteId) return;
+		setIsLoading(true);
+		const response = await fetch(`${CUSTOMERS_GET}/${customerDeleteId}`, {
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+			method: 'DELETE',
+		});
+		console.log(response);
+		if (response?.status === 200) {
+			handleFetchData();
+			setType('success');
+			setContent('Delete customer successfully');
+			setOpen();
+		}
+		setShowModalDeleteCustomer(false);
+		setIsLoading(false);
 	};
 	const handleFetchData = async () => {
 		setIsLoading(true);
@@ -69,22 +69,24 @@ const Customers = () => {
 			console.error(response);
 		}
 	};
+
 	useEffect(() => {
 		handleFetchData();
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user.token]);
 	if (!isLoading) {
 		return (
 			<div>
 				<div className="flex items-center justify-between mb-2 header">
 					<Header title="customers"></Header>
-					{/* <Button
+					<Button
 						onClick={handleShow}
 						className="flex items-center gap-2 text-black btn btn-success"
 						data-toggle="modal"
 					>
 						<i className="bx bxs-add-to-queue"></i>
 						<span>Add Customer</span>
-					</Button> */}
+					</Button>
 				</div>
 				<div className="row">
 					<div className="col-12">
@@ -97,6 +99,7 @@ const Customers = () => {
 									bodyData={customers}
 									isLoading={isLoading}
 									handleRemove={handleRemove}
+									isTableCustomer={true}
 								></Table>
 							</div>
 						</div>
@@ -107,7 +110,7 @@ const Customers = () => {
 						<Modal.Title>Add Customer</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<CustomerDialog />
+						<CustomerDialog setShow={setShow} handleFetchData={handleFetchData} />
 					</Modal.Body>
 					<Modal.Footer>
 						<Button className="btn btn-danger btn-lg btn-block" onClick={handleClose}>

@@ -8,8 +8,6 @@ import Dropdown from '../dropdown/Dropdown';
 
 import notifications from '../../assets/jsonData/notification.json';
 
-import user_image from '../../assets/images/user1.jpg';
-
 import user_menu from '../../assets/jsonData/user-menu.json';
 import { useAuth } from '../store/useAuth';
 import { AVATAR_API } from '../../utils/constant';
@@ -54,18 +52,6 @@ const TopNav = () => {
 						contentData={user_menu}
 						renderItems={(item, index) => renderUserMenu(item, index)}
 					/>
-				</div>
-				<div className="topnav__right-item">
-					<Dropdown
-						icon="bx bx-bell"
-						badge="5"
-						contentData={notifications}
-						renderItems={(item, index) => renderNotification(item, index)}
-						renderFooter={() => <Link to="/">View all</Link>}
-					/>
-				</div>
-				<div className="topnav__right-item">
-					<Dropdown />
 				</div>
 			</div>
 		</div>

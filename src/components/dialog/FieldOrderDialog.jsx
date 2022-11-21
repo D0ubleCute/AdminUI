@@ -28,8 +28,8 @@ const FieldOrderDialog = ({ scheduler, setRefresh }) => {
 	const { id } = useParams();
 	const [startTime, setStartTime] = useState(scheduler.state.start.value);
 	const [endTime, setEndTime] = useState(scheduler.state.end.value);
+	const [loading, setLoading] = useState(false);
 	const user = useAuth((state) => state.user);
-	console.log(scheduler.onConfirm);
 	const {
 		handleSubmit,
 		register,
@@ -52,7 +52,7 @@ const FieldOrderDialog = ({ scheduler, setRefresh }) => {
 	const onSubmit = async (data) => {
 		if (!isValid) return;
 		if (isSubmitting) return;
-		scheduler.loading(true);
+		setLoading(true);
 		const body = {
 			field_id: Number.parseInt(data.field_id),
 			phone: data.phone,
@@ -68,21 +68,21 @@ const FieldOrderDialog = ({ scheduler, setRefresh }) => {
 			body: JSON.stringify(body),
 		});
 		const responseData = await response.json();
-		scheduler.loading(false);
 		console.log(responseData);
 		if (responseData.status === 200) {
 			setRefresh((prev) => !prev);
 			setType('success');
 			setContent('Booked field successfully!');
 			setOpen(true);
+			setLoading(false);
 			scheduler.close();
 		} else {
 			setError('phone', { message: responseData.message });
 		}
 	};
-	if (isSubmitting) {
+	if (isSubmitting || loading) {
 		return (
-			<div className="flex items-center justify-center">
+			<div className="flex items-center justify-center w-full h-full p-5">
 				<Loading />
 			</div>
 		);

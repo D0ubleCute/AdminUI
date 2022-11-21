@@ -61,6 +61,10 @@ input:focus {
 	border: 2px solid var(--main-color);
 }
 
+p {
+	margin-bottom: unset !important;
+}
+
 .page-header {
 	margin-bottom: 40px;
 	text-transform: capitalize;
